@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Example 1</title>
+    <link rel="stylesheet" href="invoice.css" media="all" />
+</head>
+<body>
+<header class="clearfix">
+    <div id="logo">
+        <img src="images/hellonemo-logo.png">
+    </div>
+    <h1>INVOICE</h1>
+    <div id="company" class="clearfix">
+        <div><?php echo $cdata['Company_Name'] ?></div>
+        <div><?php echo $datax['Telephone'] ?></div>
+        <div><?php echo $cdata['Email']?></div>
+    </div>
+    <div id="project">
+        <div><span>CLIENT</span><?php echo $datax['Name'] ?></div>
+        <div><span>ADDRESS</span><?php echo $cdata['Address'] ?></div>
+        <div><span>EMAIL</span><?php echo $datax['Email'] ?></div>
+        <div><span>DATE</span><?php $current_date = date('D d F Y');echo $current_date; ?></div>
+    </div>
+</header>
+<main>
+    <table>
+        <thead>
+        <tr>
+
+            <th>No</th>
+            <th class="service">SERVICE</th>
+            <th class="desc">DESCRIPTION</th>
+            <th>TYPE</th>
+            <th>COST</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $total = '';  //init total cost/value
+        $sqla=mysql_query("select * from project_data where Account_ID = $aid and status = 'done'");
+        $i = 1;
+        while($dataa=mysql_fetch_array($sqla)){
+            $output ='';
+            $output.='<tr>    <td class="service">'.$i.'</td>
+                                                        <td class="service">'.$dataa['Project_Name'].'</td>
+                                                        <td class="desc">'.$dataa['Detail'].'</td>
+                                                        <td class="unit">'.$dataa['Type'].'</td>
+                                                        <td class="total">'.$dataa['Value'].' IDR</td>
+                                                        </tr>
+                                                        ';
+            $total = $total + $dataa['Value'];
+            $i++;
+            echo $output;
+        }
+        ?>
+        <tr>
+            <td colspan="4" class="grand total">Total</td>
+            <td class="grand total"><?php echo $total?></td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="notices">
+        <div>NOTICE:</div>
+        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+    </div>
+</main>
+<footer>
+    Invoice was created on a computer and is valid without the signature and seal.
+</footer>
+</body>
+</html>
